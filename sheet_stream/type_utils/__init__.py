@@ -334,8 +334,10 @@ class TableTextKeyWord(dict):
             raise ListTableShortError(
                 f'Coluna {col.col_name} é menor que o tamanho minimo da tabela'
             )
+
         self[col.col_name] = col
-        self.header.add_item(col.col_name)
+        if not self.header.contains(col.col_name, iqual=True, case=True):
+            self.header.add_item(col.col_name)
 
     def get_column(self, col_name: str | HeadCell) -> ListColumnBody:
         if isinstance(col_name, str):
@@ -425,7 +427,16 @@ class TableDocuments(TableTextKeyWord):
                 file_path: str = 'nan',
                 dir_path: str = 'nan',
                 file_type: str = 'nan',
+                remove_empty_txt: bool = True,
             ) -> TableDocuments:
+        if remove_empty_txt:
+            new_list = []
+            for i in values:
+                if (i == '') or (i is None):
+                    continue
+                new_list.append(i)
+            values = new_list
+
         max_num = len(values)
         if max_num < 1:
             return cls.create_void_dict()
@@ -496,7 +507,12 @@ def concat_table_documents(list_map: list[TableDocuments]) -> TableDocuments:
             col.extend(
                 text_table[col.col_name]
             )
-    return TableDocuments(list_values)
+    _final = TableDocuments(list_values)
+    _col_keys = _final.get_column(ColumnsTable.KEY)
+    for n, v in enumerate(_col_keys):
+        _col_keys[n] = f'{n}'
+    _final.set_column(_col_keys)
+    return _final
 
 
 __all__ = [
