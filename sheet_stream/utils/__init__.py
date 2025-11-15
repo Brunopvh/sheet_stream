@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from soup_files import ProgressBarAdapter, ABCProgressBar
+from soup_files import (
+    ProgressBarAdapter, ABCProgressBar, TextProgress, CreatePbar,
+)
 
 
 class VoidPBar(ABCProgressBar):

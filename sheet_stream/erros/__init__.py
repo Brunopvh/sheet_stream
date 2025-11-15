@@ -1,4 +1,9 @@
 
+class InvalidTypeObject(Exception):
+
+    def __init__(self, *args):
+        super().__init__(self, *args)
+
 
 class InvalidFileSheetError(Exception):
 
